@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:9
+    cap_add:
+      - ALL
+    volumes:
+#      - ./data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=tectonic
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=tectonic123456
+      - MYSQL_ROOT_PASSWORD=root_user123!@#
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - '4406:3306'
+    hostname: tectonic-mysql
+    container_name: tectonic-mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    networks:
+      - tectonic-network
+
+#  phpmyadmin:
+#    image: phpmyadmin:5.2
+#    environment:
+#      - PMA_HOST=tectonic-mysql
+#      - PMA_PORT=4406
+#      - PMA_USER=go
+#      - PMA_PASSWORD=tectonic123456
+#      - MYSQL_ROOT_PASSWORD=root_user123!@#
+#    ports:
+#      - '8080:80'
+#    hostname: tectonic-phpmyadmin
+#    container_name: tectonic-phpmyadmin
+#    depends_on:
+#      - mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  tectonic-network:
+    driver: bridge
